@@ -89,3 +89,10 @@ This modular structure improves maintainability, organisation, and future scalab
 The Lighthouse audit identified several accessibility issues, with an overall accessibility score of 75/100. Basic keyboard interactions with the website's text-size controls were also tested successfully.
 
 The audit highlights opportunities to improve accessibility, usability, and the overall website experience.
+## 8. Audit Evidence
+
+### Lighthouse Accessibility Score
+
+The website received an accessibility score of 76/100.
+
+![Lighthouse Accessibility Score](lighthouse-accessibility-score.png)
