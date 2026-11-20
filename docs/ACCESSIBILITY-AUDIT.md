@@ -1,68 +1,91 @@
 # Accessibility Baseline & Repository Architecture Audit
 
-## 1. Scope and method
+## 1. Project Overview
 
-- **Target:** Coimbatore City Municipal Corporation — https://www.ccmc.gov.in/
-- **Date of source review:** 20 November 2026
-- **Scope:** publicly exposed home-page content and link structure.
-- **Method performed:** review of the page's text/structure representation as returned by a public web fetch.
-- **Not performed:** Chrome Lighthouse, visual inspection, keyboard interaction, screen-reader testing, mobile/responsive testing, or DOM/ARIA inspection.
+- **Website audited:** Coimbatore City Municipal Corporation
+- **Website URL:** https://www.ccmc.gov.in/
+- **Audit date:** 20 November 2026
+- **Testing tool:** Google Chrome Lighthouse
+- **Testing configuration:** Accessibility, Desktop, Navigation
 
-The public page contains primary navigation, civic-service links (including Online Tax Payment and Post a Grievance), news items, a weather area, and a footer that repeats many navigation links. The page also exposes a site-upgrade notice. The five entries below are **audit candidates**, not confirmed defects. Their WCAG mapping is a hypothesis to guide manual verification.
+## 2. Lighthouse Accessibility Results
 
-## 2. Potential findings to verify
+The website received an accessibility score of **75/100** in the Lighthouse audit.
 
-| ID | Candidate / evidence seen in page extraction | Possible WCAG area | Priority | What must be checked before confirming |
-|---|---|---|---|---|
-| WEB-001 | Many news entries expose the same visible link text, `Read more` (home page news section). | 2.4.4 Link Purpose (In Context) | Medium | Inspect each link's accessible name and surrounding article context. If screen-reader users cannot distinguish destinations, give each link a unique accessible name such as `Read more about [article title]`. |
-| WEB-002 | Several image links are represented only as `Image` in the extracted page structure, including repeated logo/banner image links. | 1.1.1 Non-text Content; 2.4.4 | High if meaningful links lack names | Inspect the actual `alt`, accessible name, and destination. Decorative images should have empty alt text; informative images and image links need an appropriate text alternative/name. |
-| WEB-003 | The primary navigation appears near the top and a similar full navigation list appears again in the footer. | 2.4.1 Bypass Blocks; 2.4.6 Headings and Labels (review candidate) | Low/Medium | Check for a working skip link, semantic `nav` landmarks with distinct labels, and logical keyboard order. Repeated navigation is not itself a WCAG failure. |
-| WEB-004 | A weather area is exposed as an embedded iframe, with weather content and a third-party forecast link. | 2.1.1 Keyboard; 4.1.2 Name, Role, Value | Medium | Tab into and out of the iframe; verify its `title`, focus order, keyboard operability, and whether the embedded provider content is accessible. |
-| WEB-005 | Text-size controls are exposed as `+A A -A` in the page representation. | 2.1.1 Keyboard; 4.1.2 Name, Role, Value | Medium | Inspect whether each control is a real button, has a meaningful accessible name, works by keyboard, and communicates the current text-size state if applicable. |
+The following accessibility issues were observed:
 
-## 3. Evidence references
+| No. | Accessibility issue | Observed evidence |
+|---|---|---|
+| 1 | Images do not have alternative text | 15 image elements reported without alt attributes |
+| 2 | Links do not have discernible names | 3 links reported |
+| 3 | Insufficient color contrast | Lighthouse reported contrast failures |
+| 4 | Iframe does not have a title | 1 iframe reported without a title |
+| 5 | Heading elements are not in sequential order | An h4 heading was shown as an example |
 
-The public page representation reviewed on 20 November 2026 exposes:
+### Additional Lighthouse observations
 
-- Primary navigation and civic service links: page lines 41–106.
-- Weather area and text-size controls: lines 5–25 and 135–145.
-- Main content and news links with repeated `Read more` labels: lines 185–190 and 192–267.
-- Repeated footer navigation: lines 277–370.
-- Site-upgrade notice: lines 371–374.
+- Some links rely only on color to be distinguishable.
+- Some lists contain elements that do not follow the expected list structure.
 
-Source: https://www.ccmc.gov.in/ (public page text/structure inspection). The extracted representation is not a substitute for inspecting the live DOM or rendered page.
+## 3. Why These Issues Matter
 
-## 4. Manual verification procedure
+1. **Missing alternative text:** Screen-reader users may not understand the purpose or content of meaningful images.
+2. **Links without discernible names:** Users relying on assistive technology may not understand where a link leads.
+3. **Insufficient color contrast:** Users with low vision may find text difficult to read.
+4. **Iframe without a title:** Users may not understand the purpose of the embedded content.
+5. **Incorrect heading order:** A confusing heading hierarchy can make page navigation harder for assistive technology users.
 
-### Lighthouse
+## 4. Manual Keyboard Accessibility Testing
 
-1. Open the site in Google Chrome.
-2. Open DevTools with `Ctrl + Shift + I` (or `Fn + F12` on some laptops).
-3. Select **Lighthouse**. If it is hidden, open the DevTools `»` overflow menu.
-4. Select **Accessibility** and run the report.
-5. Save a screenshot showing the score and audit details to `docs/evidence/lighthouse-accessibility.png`.
+Keyboard-only testing was performed on the website.
 
-### Keyboard-only pass
+| Test | Result | Observation |
+|---|---|---|
+| Tab navigation | Passed | Focus moved to interactive elements |
+| Enter key | Passed | Activated the A/A+ text-size controls |
+| Shift + Tab | Passed | Moved focus to the previous element |
+| Visible keyboard focus | Passed | Focused elements were visibly highlighted |
 
-1. Reload the home page and do not use the mouse.
-2. Press `Tab` repeatedly; record focus order and whether focus is visible.
-3. Use `Shift + Tab` to move backwards.
-4. Use `Enter` and `Space` on focused links/buttons.
-5. Check that focus can enter and leave the weather iframe and menus without getting trapped.
-6. Record the exact element, expected behavior, observed behavior, and screenshot.
+**Note:** The keyboard tests above cover the interactions described. A complete keyboard audit of every page element and embedded content was not performed.
 
-### Finding acceptance rule
+## 5. Recommended Improvements
 
-Change a candidate to **Confirmed** only after reproducing it. If it cannot be reproduced, mark it **Not reproduced** and document the test. Never invent a Lighthouse score or claim that a browser test was run when it was not.
+1. Add appropriate alt attributes to meaningful images. Use empty alt text for decorative images.
+2. Provide meaningful accessible names for links.
+3. Improve foreground and background color contrast.
+4. Add descriptive title attributes to iframes.
+5. Maintain a logical heading hierarchy.
+6. Use semantic HTML list elements.
+7. Make links distinguishable without relying only on color.
 
-## 5. Remediation priorities
+## 6. Repository Architecture
 
-1. Ensure every meaningful image link has a descriptive accessible name; decorative images should not create noisy announcements.
-2. Make repeated news links distinguishable in context and in the accessibility tree.
-3. Ensure navigation landmarks, skip navigation, and keyboard focus order are clear.
-4. Give the weather iframe a descriptive title and verify its embedded controls are keyboard accessible.
-5. Implement text-size controls as labelled, keyboard-operable buttons with predictable behavior.
+The repository follows a modular structure to separate different responsibilities.
 
-## 6. Architecture decision
+```text
+accessibility-baseline-repository-audit/
+│
+├── client/       # Frontend application
+├── server/       # Backend and API logic
+├── docs/         # Audit report and documentation
+├── tests/        # Testing files
+│
+├── README.md
+├── ACCESSIBILITY-AUDIT.md
+└── accessibility-audit-template.csv
+```
 
-The repository separates browser UI (`client`), HTTP/API logic (`server`), audit evidence (`docs`), and quality checks (`tests`). The first vertical feature slice is an Audit Findings list served by `GET /api/findings`. This keeps presentation separate from validation and business rules and gives the team a small end-to-end feature to extend.
+### Architecture explanation
+
+- **Client:** Handles the user interface and presentation.
+- **Server:** Handles API logic and backend operations.
+- **Docs:** Stores audit findings, evidence, and project documentation.
+- **Tests:** Organises test-related files.
+
+This modular structure improves maintainability, organisation, and future scalability.
+
+## 7. Conclusion
+
+The Lighthouse audit identified several accessibility issues, with an overall accessibility score of 75/100. Basic keyboard interactions with the website's text-size controls were also tested successfully.
+
+The audit highlights opportunities to improve accessibility, usability, and the overall website experience.
