@@ -1,72 +1,76 @@
 # Accessibility Baseline & Repository Architecture Audit
 
-A small monorepo foundation for an accessibility review of a public-service website and a future audit-findings feature.
+A monorepo foundation for reviewing website accessibility and documenting audit findings.
 
-## Audited website
+## Audited Website
 
 - **Website:** Coimbatore City Municipal Corporation (CCMC)
 - **URL:** https://www.ccmc.gov.in/
-- **Review date:** 20 November 2026 (source review)
-- **Review method completed here:** public-page text/structure inspection
-- **Not yet completed:** Chrome Lighthouse run, keyboard-only interaction test, screen-reader test, and visual contrast inspection
+- **Audit date:** 20 November 2026
+- **Testing tool:** Google Chrome Lighthouse
+- **Lighthouse Accessibility Score:** 76/100
 
-> **Accuracy note:** The items in `docs/ACCESSIBILITY-AUDIT.md` are potential findings from the public page's extracted content. They are not confirmed WCAG failures. Confirm each item in a browser and replace the status/evidence with your own reproducible observations before presenting the audit as final.
+## Accessibility Testing
 
-## Repository structure
+The website was tested using Lighthouse and keyboard-only navigation.
+
+### Lighthouse Findings
+
+The audit identified the following issues:
+
+1. Images missing alternative text.
+2. Links without discernible names.
+3. Insufficient color contrast.
+4. Iframe without a descriptive title.
+5. Incorrect heading hierarchy.
+
+Additional observations included links relying on color and incorrect list structure.
+
+### Keyboard Testing
+
+| Test | Result |
+|---|---|
+| Tab navigation | Passed |
+| Enter key activation | Passed |
+| Shift + Tab navigation | Passed |
+| Visible keyboard focus | Passed |
+
+See `docs/ACCESSIBILITY-AUDIT.md` for detailed findings and testing observations.
+
+## Repository Structure
 
 ```text
-accessibility-repository-audit/
-├── client/                         # Browser UI
-│   ├── src/
-│   └── README.md
-├── server/                         # HTTP API and business logic
-│   ├── src/
-│   └── README.md
+accessibility-baseline-repository-audit/
+├── client/                         # Frontend application
+├── server/                         # Backend and API logic
 ├── docs/
-│   ├── ACCESSIBILITY-AUDIT.md      # Audit method and findings
-│   └── evidence/                   # Lighthouse and manual-test screenshots
-├── tests/                          # Test plan and future automated tests
-├── accessibility-audit-template.csv
-└── README.md
+│   ├── ACCESSIBILITY-AUDIT.md      # Audit report
+│   └── lighthouse-accessibility-score.png
+├── tests/                           # Testing files
+├── README.md
+└── accessibility-audit-template.csv
 ```
 
-## Architecture boundaries
+## Architecture Boundaries
 
-- `client/` owns presentation, navigation, forms, and client-side interaction.
-- `server/` owns API endpoints, validation, and business rules.
-- `docs/` stores audit decisions, evidence, and architecture notes.
-- `tests/` stores API, component, and accessibility test cases.
-- The client communicates with the server through HTTP/JSON. It must not access server data storage directly.
+- **Client:** Handles the user interface and presentation.
+- **Server:** Handles API logic and backend operations.
+- **Docs:** Stores audit reports and evidence.
+- **Tests:** Organises testing-related files.
 
-## Local setup
+The client communicates with the server through HTTP/JSON. This separation improves maintainability and organisation.
 
-This is an intentionally dependency-free starter. It requires Node.js 18 or newer.
+## Future Improvements
 
-1. Install Node.js from https://nodejs.org/.
-2. Open a terminal in this repository folder.
-3. Start the API: `node server/src/index.js`
-4. Open `http://localhost:3000/api/health` to check the API.
-5. Open `client/index.html` in a browser for the static client placeholder.
+- Fix missing image alternative text.
+- Improve link accessibility.
+- Improve text and background contrast.
+- Add descriptive iframe titles.
+- Maintain a logical heading structure.
+- Add automated accessibility tests.
 
-No database, framework, or deployment environment has been selected yet. Those choices should be documented before adding dependencies.
+## Conclusion
 
-## First vertical feature slice: Audit Findings
+The project establishes a basic monorepo structure and documents accessibility issues identified during the website audit. Lighthouse testing and basic keyboard navigation testing have been completed.
 
-1. A reviewer opens the findings page in the client.
-2. The client requests `GET /api/findings`.
-3. The server returns finding records as JSON.
-4. The client displays issue ID, page/component, WCAG reference, severity, status, and remediation.
-5. Tests verify the API response and keyboard accessibility of the findings list.
-
-## Audit evidence checklist
-
-- [ ] Lighthouse Accessibility report screenshot saved in `docs/evidence/`
-- [ ] Keyboard-only test notes/screenshots saved in `docs/evidence/`
-- [ ] Five potential findings reproduced and confirmed (or rejected)
-- [x] Source-inspection notes and five candidates documented
-- [x] Monorepo directory skeleton created
-- [x] Architecture README and first feature slice documented
-
-## Important
-
-A source/text review is not a substitute for Lighthouse or manual testing. Do not claim WCAG conformance based only on this starter report.
+A complete screen-reader audit and further manual accessibility testing remain future improvements.
