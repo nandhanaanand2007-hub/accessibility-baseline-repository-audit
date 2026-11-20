@@ -10,7 +10,7 @@
 
 ## 2. Lighthouse Accessibility Results
 
-The website received an accessibility score of **75/100** in the Lighthouse audit.
+The website received an accessibility score of **76/100** in the Lighthouse audit.
 
 The following accessibility issues were observed:
 
