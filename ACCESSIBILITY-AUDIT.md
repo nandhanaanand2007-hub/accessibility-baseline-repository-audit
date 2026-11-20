@@ -83,3 +83,15 @@ The Lighthouse results also listed:
 5. Test with a screen reader where possible.
 
 **Important:** This report records the results shared from the Lighthouse run. Keyboard-only testing and manual assistive-technology verification have not yet been completed, so they are not claimed as completed.
+## Manual Keyboard Accessibility Testing
+
+The website was tested using keyboard-only navigation.
+
+| Test | Result | Observation |
+|---|---|---|
+| Tab navigation | Passed | Focus moves to interactive elements |
+| Enter key | Passed | Activates the A/A+ text-size controls |
+| Shift + Tab | Passed | Moves focus to the previous element |
+| Visible keyboard focus | Passed | Focused elements are visibly highlighted |
+
+**Conclusion:** The tested keyboard controls are accessible using keyboard navigation. Further testing with a screen reader is recommended.
